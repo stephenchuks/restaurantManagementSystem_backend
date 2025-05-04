@@ -1,0 +1,37 @@
+# no `version:` field needed with Compose v2+
+services:
+  app:
+    build:
+      context: .
+      target: runner
+    container_name: menu-app
+    image: my-menu-platform-backend:latest
+    env_file:
+      - .env
+    ports:
+      - 4000:4000
+    depends_on:
+      - mongo
+      - cache
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6.0
+    container_name: menu-mongo
+    environment:
+      MONGO_INITDB_DATABASE: menu_platform
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+
+  cache:
+    image: redis:7-alpine
+    container_name: menu-redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
