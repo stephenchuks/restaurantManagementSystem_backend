@@ -1,11 +1,9 @@
 // src/config/database.ts
 import mongoose from 'mongoose';
-import { config } from './index';
+import { config } from './index.js';
 
-export async function connectDB() {
-  await mongoose.connect(config.MONGODB_URI, {
-    dbName: config.MONGODB_DB,
-    // useUnifiedTopology, useNewUrlParser are defaults in mongoose v6+
-  });
-  console.log('✅ MongoDB connected');
+export async function connectDB(): Promise<void> {
+  // config.MONGODB_URI already has the DB name & authSource
+  await mongoose.connect(config.MONGODB_URI);
+  console.log(`✅ MongoDB connected`);
 }
